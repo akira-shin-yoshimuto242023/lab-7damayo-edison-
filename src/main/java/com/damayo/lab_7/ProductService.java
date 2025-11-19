@@ -1,4 +1,61 @@
 package com.damayo.lab_7;
 
+import org.springframework.stereotype.Service;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicLong;
+
+@Service
 public class ProductService {
+
+    private final Map<Long, Product> productDatabase = new HashMap<>();
+    private final AtomicLong idCounter = new AtomicLong(3); // Starting after initial mock data
+
+    // Initialize with mock data
+    public ProductService() {
+        // Adding initial mock products as specified
+        productDatabase.put(1L, new Product(1L, "Laptop Pro", 1299.99));
+        productDatabase.put(2L, new Product(2L, "Wireless Mouse", 29.99));
+        productDatabase.put(3L, new Product(3L, "Mechanical Keyboard", 89.99));
+    }
+
+    // GET ALL Products
+    public List<Product> getAllProducts() {
+        return new ArrayList<>(productDatabase.values());
+    }
+
+    // GET Product by ID
+    public Product getProductById(Long id) {
+        return productDatabase.get(id);
+    }
+
+    // CREATE new Product
+    public Product createProduct(Product product) {
+        Long newId = idCounter.getAndIncrement();
+        product.setId(newId);
+        productDatabase.put(newId, product);
+        return product;
+    }
+
+    // UPDATE existing Product
+    public Product updateProduct(Long id, Product product) {
+        if (productDatabase.containsKey(id)) {
+            product.setId(id);
+            productDatabase.put(id, product);
+            return product;
+        }
+        return null; // Product not found
+    }
+
+    // DELETE Product
+    public boolean deleteProduct(Long id) {
+        return productDatabase.remove(id) != null;
+    }
+
+    // Check if product exists
+    public boolean productExists(Long id) {
+        return productDatabase.containsKey(id);
+    }
 }
