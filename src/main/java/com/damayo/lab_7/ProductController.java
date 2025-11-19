@@ -36,23 +36,37 @@ public class ProductController {
 
     // CREATE new Product - Returns 201 Created
     @PostMapping
-    public ResponseEntity<Product> createProduct(@RequestBody Product product) {
-        Product createdProduct = productService.createProduct(product);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdProduct);
+    public ResponseEntity<?> createProduct(@RequestBody Product product) {
+        try {
+            Product createdProduct = productService.createProduct(product);
+            return ResponseEntity.status(HttpStatus.CREATED).body(createdProduct);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error creating product: " + e.getMessage());
+        }
     }
 
     // UPDATE existing Product - Returns 200 OK or 404 Not Found
     @PutMapping("/{id}")
-    public ResponseEntity<Product> updateProduct(@PathVariable Long id, @RequestBody Product product) {
-        Product updatedProduct = productService.updateProduct(id, product);
-        if (updatedProduct != null) {
-            return ResponseEntity.ok(updatedProduct);
-        } else {
-            return ResponseEntity.notFound().build();
+    public ResponseEntity<?> updateProduct(@PathVariable Long id, @RequestBody Product product) {
+        try {
+            Product updatedProduct = productService.updateProduct(id, product);
+            if (updatedProduct != null) {
+                return ResponseEntity.ok(updatedProduct);
+            } else {
+                return ResponseEntity.notFound().build();
+            }
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error updating product: " + e.getMessage());
         }
     }
 
-    // DELETE Product - Returns 200 OK
+    // DELETE Product - Returns 200 OK or 404 Not Found
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteProduct(@PathVariable Long id) {
         boolean deleted = productService.deleteProduct(id);
@@ -61,5 +75,12 @@ public class ProductController {
         } else {
             return ResponseEntity.notFound().build();
         }
+    }
+
+    // Additional endpoint to get product count
+    @GetMapping("/count")
+    public ResponseEntity<Integer> getProductCount() {
+        int count = productService.getProductCount();
+        return ResponseEntity.ok(count);
     }
 }
