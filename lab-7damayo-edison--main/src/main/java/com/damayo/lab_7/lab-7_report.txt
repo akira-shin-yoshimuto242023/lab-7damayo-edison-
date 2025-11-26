@@ -1,0 +1,49 @@
+Laboratory 7 - Product Inventory API Report
+============================================
+
+API ENDPOINT INFORMATION:
+-------------------------
+
+1. Complete URL path for POST endpoint:
+   POST http://localhost:3330/api/products
+
+2. Complete URL path and expected status code for non-existent item in GET by ID request:
+   GET http://localhost:3330/api/products/999
+   Expected Status Code: 404 Not Found
+
+3. Successful POST Request Details:
+   - Endpoint: POST http://localhost:3330/api/products
+   - Expected Status Code: 201 Created
+   - Request Body Example:
+     {
+       "name": "Smartphone X",
+       "price": 799.99
+     }
+   - Response Body Example:
+     {
+       "id": 4,
+       "name": "Smartphone X",
+       "price": 799.99
+     }
+
+INITIAL PRODUCT DATA:
+--------------------
+- ID: 1, Name: Laptop Pro, Price: 1299.99
+- ID: 2, Name: Wireless Mouse, Price: 129.99
+- ID: 3, Name: Mechanical Keyboard, Price: 890.99
+
+API ENDPOINTS SUMMARY:
+----------------------
+- GET    /api/products           - Get all products (200 OK)
+- GET    /api/products/{id}      - Get product by ID (200 OK or 404 Not Found)
+- POST   /api/products           - Create new product (201 Created)
+- PUT    /api/products/{id}      - Update product (200 OK or 404 Not Found)
+- DELETE /api/products/{id}      - Delete product (200 OK or 404 Not Found)
+- GET    /api/products/count     - Get total product count (200 OK)
+
+TESTING INSTRUCTIONS:
+---------------------
+1. Start the Spring Boot application
+2. Use Postman or any REST client to test endpoints
+3. Application runs on port 3330
+4. Base URL: http://localhost:3330
