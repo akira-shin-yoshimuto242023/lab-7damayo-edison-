@@ -1,0 +1,48 @@
+type Product {
+    id: ID!
+    name: String!
+    price: Float!
+}
+
+type Customer {
+    id: ID!
+    name: String!
+    email: String!
+    invoices: [Invoice!]
+}
+
+type Invoice {
+    id: ID!
+    invoiceDate: String!
+    totalAmount: Float!
+    customer: Customer!
+    products: [Product!]!
+}
+
+type Query {
+    # Product Queries
+    getAllProducts: [Product!]
+    getProductById(id: ID!): Product
+    getProductCount: Int!
+
+    # Customer Queries
+    getAllCustomers: [Customer!]
+    getCustomerById(id: ID!): Customer
+
+    # Invoice Queries
+    getAllInvoices: [Invoice!]
+    getInvoiceById(id: ID!): Invoice
+}
+
+type Mutation {
+    # Product Mutations
+    createProduct(name: String!, price: Float!): Product!
+    updateProduct(id: ID!, name: String!, price: Float!): Product
+    deleteProduct(id: ID!): Boolean
+
+    # Customer Mutations
+    createCustomer(name: String!, email: String!): Customer!
+
+    # Invoice Mutations
+    createInvoice(customerId: ID!, productIds: [ID!]!): Invoice!
+}
